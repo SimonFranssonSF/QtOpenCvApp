@@ -7,7 +7,7 @@ Small app written in c++ using QT Creator using openCV3 library. Open an image a
 ![Alt text](/screenshots/3.png?raw=true "Optional Title")
 ![Alt text](/screenshots/4.png?raw=true "Optional Title")
 
-This app was just written as a hobby/curiosity.
+This app was written as a hobby/ out of curiosity.
 
 For interest in OpenCV visit - https://opencv.org/
 For interest in QT - https://www.qt.io/ 
