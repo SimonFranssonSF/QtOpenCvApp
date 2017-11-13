@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/filter/info">
+        <file>resources/boxFilter.html</file>
+        <file>resources/laplacianFilter.html</file>
+        <file>resources/sobelFilter.html</file>
+        <file>resources/gaussianFilter.html</file>
+        <file>resources/medianFilter.html</file>
+    </qresource>
+</RCC>
