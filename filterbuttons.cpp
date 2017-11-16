@@ -1,36 +1,36 @@
 #include "filterbuttons.h"
-#include <QGroupBox>
 #include <QList>
 #include <iostream>
 #include <computervision.h>
 #include <QtDebug>
-#include <filterwidget.h>
+#include <leftcolwidget.h>
+#include <factorygroupbox.h>
 
-FilterButtons::FilterButtons(QWidget *parent, QLabel* qLabel, ComputerVision* computerVision, FilterWidget* filterWidget, QLabel* statusBar) : QGroupBox(parent) {
+FilterButtons::FilterButtons(QWidget *parent, QLabel* qLabel, ComputerVision* computerVision, LeftColWidget* leftColWidget, QLabel* statusBar) : FactoryGroupBox() {
     this->qLabel = qLabel;
     this->computerVision = computerVision;
-    this->filterWidget = filterWidget;
+    this->leftColWidget = leftColWidget;
     this->statusBar = statusBar;
 
     boxButtons = new QVBoxLayout;
     this->setTitle("Filters");
-    radioNoFilter = new QPushButton(tr("No filter"));
-    radioBFilter = new QPushButton(tr("Box filter"));
-    radioMFilter = new QPushButton(tr("Median filter"));
-    radioGFilter = new QPushButton(tr("Gaussian filter"));
-    radioSFilter = new QPushButton(tr("Sobel filter"));
-    radioLFilter = new QPushButton(tr("Laplacian filter"));
+    noFilterButton = new QPushButton(tr("No filter"));
+    boxFilterButton = new QPushButton(tr("Box filter"));
+    medianFilterButton = new QPushButton(tr("Median filter"));
+    gaussianFilterButton = new QPushButton(tr("Gaussian filter"));
+    sobelFilterButton = new QPushButton(tr("Sobel filter"));
+    laplacianFilterButton = new QPushButton(tr("Laplacian filter"));
 
-    buttons.append(radioNoFilter);
-    buttons.append(radioBFilter);
-    buttons.append(radioMFilter);
-    buttons.append(radioGFilter);
-    buttons.append(radioSFilter);
-    buttons.append(radioLFilter);
+    buttons.append(noFilterButton);
+    buttons.append(boxFilterButton);
+    buttons.append(medianFilterButton);
+    buttons.append(gaussianFilterButton);
+    buttons.append(sobelFilterButton);
+    buttons.append(laplacianFilterButton);
 
     applyButtonCharacteristics();
 
-    radioNoFilter->setChecked(true);
+    noFilterButton->setChecked(true);
 
     setLayout(boxButtons);
 }
@@ -53,24 +53,24 @@ void FilterButtons::buttonClicked() {
     QObject* button = QObject::sender();
     statusBar->setText("");
 
-    if (button == radioNoFilter && radioNoFilter->isChecked() == false) {
-        radioNoFilter->setChecked(true);
+    if (button == noFilterButton && noFilterButton->isChecked() == false) {
+        noFilterButton->setChecked(true);
         this->computerVision->applyNoFilter();
-    } else if (button == radioBFilter && radioBFilter->isChecked() == false) {
-        radioBFilter->setChecked(true);
+    } else if (button == boxFilterButton && boxFilterButton->isChecked() == false) {
+        boxFilterButton->setChecked(true);
         int kernelSize = this->computerVision->getBoxKernel();
         this->computerVision->applyBoxFilter(kernelSize);
-    } else if (button == radioMFilter && radioMFilter->isChecked() == false) {
-        radioMFilter->setChecked(true);
+    } else if (button == medianFilterButton && medianFilterButton->isChecked() == false) {
+        medianFilterButton->setChecked(true);
         int kernelSize = this->computerVision->getMedianKernel();
         this->computerVision->applyMedianFilter(kernelSize);
-    } else if (button == radioGFilter && radioGFilter->isChecked() == false) {
-        radioGFilter->setChecked(true);
+    } else if (button == gaussianFilterButton && gaussianFilterButton->isChecked() == false) {
+        gaussianFilterButton->setChecked(true);
         int kernelSize = this->computerVision->getGaussianKernel();
         int sigma = this->computerVision->getGaussianSigma();
         this->computerVision->applyGaussianFilter(kernelSize, sigma);
-    } else if (button == radioSFilter && radioSFilter->isChecked() == false) {
-        radioSFilter->setChecked(true);
+    } else if (button == sobelFilterButton && sobelFilterButton->isChecked() == false) {
+        sobelFilterButton->setChecked(true);
         try {
             int kernelSize = this->computerVision->getSobelKernel();
             int dx = this->computerVision->getSobelDx();
@@ -79,16 +79,16 @@ void FilterButtons::buttonClicked() {
         } catch (std::invalid_argument &e)  {
             this->statusBar->setText(e.what());
         }
-    } else if (button == radioLFilter && radioLFilter->isChecked() == false) {
-        radioLFilter->setChecked(true);
+    } else if (button == laplacianFilterButton && laplacianFilterButton->isChecked() == false) {
+        laplacianFilterButton->setChecked(true);
         int kernelSize = this->computerVision->getLaplacianKernel();
         this->computerVision->applyLaplacianFilter(kernelSize);
     }
 
     QImage qImage = this->computerVision->getDisplayImage();
     this->qLabel->setPixmap(QPixmap::fromImage(qImage));
-    this->filterWidget->showCorrectParam(button);
-    if (button != radioSFilter) {
+    this->leftColWidget->showCorrectParam(button);
+    if (button != sobelFilterButton) {
         this->statusBar->setText("");
     }
 }

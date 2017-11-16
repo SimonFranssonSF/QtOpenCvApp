@@ -1,5 +1,5 @@
-#ifndef FILTERWIDGET_H
-#define FILTERWIDGET_H
+#ifndef LEFTCOLWIDGET_H
+#define LEFTCOLWIDGET_H
 
 #include <QWidget>
 #include <QLabel>
@@ -10,20 +10,24 @@
 #include <QWidget>
 #include <filterbuttons.h>
 #include <computervision.h>
+#include <featurebuttons.h>
 
 class FilterButtons;
+class FeatureButtons;
 
-class FilterWidget : public QWidget {
+class LeftColWidget : public QWidget {
     Q_OBJECT
     public:
-        FilterWidget(QWidget *parent = 0, QLabel* canvas = 0, ComputerVision* computerVision = 0, QLabel* statusBar = 0);
+        LeftColWidget(QWidget *parent = 0, QLabel* canvas = 0, ComputerVision* computerVision = 0, QLabel* statusBar = 0, std::string mode = "filter");
         ComputerVision* computerVision;
         QLabel* canvas;
         QLabel* statusBar;
         void showCorrectParam(QObject* button);
         void enableButtons(bool enable);
     private:
-        FilterButtons* groupBoxFilters;
+        std::string mode;
+
+        FactoryGroupBox* groupBoxButtons;
 
         QGroupBox* groupBoxParameters;
 
@@ -52,7 +56,7 @@ class FilterWidget : public QWidget {
 
         QLabel* labelLKernel;
 
-        std::string currentFilter;
+        std::string currentContent;
 
         void clearWidgets(QLayout * layout);
         void boxFilterParams();
@@ -74,4 +78,4 @@ class FilterWidget : public QWidget {
             void sliderKernelLaplacian(int value);
             void infoButtonClicked();
 };
-#endif // FILTERWIDGET_H
+#endif // LEFTCOLWIDGET_H

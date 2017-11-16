@@ -1,25 +1,21 @@
 #ifndef FILTERBUTTON_H
 #define FILTERBUTTON_H
 
-#include <QWidget>
-#include <filterwidget.h>
-#include <QLabel>
 #include <QPushButton>
-#include <QGroupBox>
 #include <QVBoxLayout>
 #include <QSlider>
-#include <QWidget>
 #include <QList>
-#include <computervision.h>
+#include <factorygroupbox.h>
 
-class FilterWidget;
+class FactoryGroupBox;
 
-class FilterButtons : public QGroupBox {
+class FilterButtons : public FactoryGroupBox {
     Q_OBJECT
     public:
-        FilterButtons(QWidget *parent = 0, QLabel* qLabel = 0, ComputerVision* computerVision = 0, FilterWidget* filterWidget = 0, QLabel* statusBar = 0);
+        FilterButtons(QWidget *parent = 0, QLabel* qLabel = 0, ComputerVision* computerVision = 0, LeftColWidget* leftColWidget = 0, QLabel* statusBar = 0);
+        friend class FactoryGroupBox;
         ComputerVision* computerVision;
-        FilterWidget* filterWidget;
+        LeftColWidget* leftColWidget;
         void enableButtons(bool enable);
     private:
         QLabel* qLabel;
@@ -31,12 +27,12 @@ class FilterButtons : public QGroupBox {
 
         QVBoxLayout *boxButtons;
 
-        QPushButton *radioNoFilter;
-        QPushButton *radioBFilter;
-        QPushButton *radioMFilter;
-        QPushButton *radioGFilter;
-        QPushButton *radioSFilter;
-        QPushButton *radioLFilter;
+        QPushButton *noFilterButton;
+        QPushButton *boxFilterButton;
+        QPushButton *medianFilterButton;
+        QPushButton *gaussianFilterButton;
+        QPushButton *sobelFilterButton;
+        QPushButton *laplacianFilterButton;
 
         void applyButtonCharacteristics();
         void resetButtons();

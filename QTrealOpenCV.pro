@@ -28,16 +28,20 @@ INCLUDEPATH += /usr/local/Cellar/boost/1.65.1/include/
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    filterwidget.cpp \
     filterbuttons.cpp \
     computervision.cpp \
-    filterinfo.cpp
+    featurebuttons.cpp \
+    leftcolwidget.cpp \
+    factorygroupbox.cpp \
+    info.cpp
 
 HEADERS  += mainwindow.h \
-    filterwidget.h \
     filterbuttons.h \
     computervision.h \
-    filterinfo.h
+    featurebuttons.h \
+    leftcolwidget.h \
+    factorygroupbox.h \
+    info.h
 
 LIBS += -L/usr/local/Cellar/opencv3/3.2.0/lib \
      -lopencv_core \

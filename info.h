@@ -1,16 +1,16 @@
-#ifndef FILTERINFO_H
-#define FILTERINFO_H
+#ifndef INFO_H
+#define INFO_H
 #include <QDialog>
 #include <QTextBrowser>
 
-class FilterInfo : public QTextBrowser
+class Info : public QTextBrowser
 {
 public:
-    FilterInfo();
-    void setContent(std::string filter);
+    Info();
+    void setContent(std::string content);
 private:
-    void readHtml(QString filter);
+    void readHtml(QString content);
     void centerWindow(QWidget* window);
 };
 
-#endif // FILTERINFO_H
+#endif // INFO_H

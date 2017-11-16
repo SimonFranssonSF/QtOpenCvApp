@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "filterwidget.h"
+#include "leftcolwidget.h"
 #include "ui_mainwindow.h"
 #include <QLabel>
 #include <QRectF>
@@ -15,13 +15,18 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     computerVision = new ComputerVision();
+
+    widget = new QWidget;
+    setCentralWidget(widget);
+
     applyLayout();
 }
 
 void MainWindow::applyLayout() {
     QCoreApplication::setApplicationName(QString("Some app"));
     setWindowTitle("Filters");
-    applyFilterWidget();
+    statusBar = statusBar = new QLabel();
+    applyLeftCol("filter");
     applyMenuBarActions();
     applyMenuBar();
 }
@@ -36,7 +41,7 @@ void MainWindow::open() {
     if (!pixmapImage.isNull()) {
         computerVision->setWorkingImage(pixmapImage);
 
-        // This was needed to center that mainWindow after using QFileDialog
+        // This was needed to center the mainWindow after using QFileDialog
         canvas->hide();
         canvas->setPixmap(pixmapImage);
         canvas->show();
@@ -81,24 +86,27 @@ void MainWindow::print() {
 }
 
 void MainWindow::filter() {
-    leftCol->show();
     openAct->setEnabled(true);
-    QImage qImage = this->computerVision->getDisplayImage();
-    if (qImage.isNull() != true) {
-        this->canvas->setPixmap(QPixmap::fromImage(qImage));
+    pixmapImage = QPixmap::fromImage(this->computerVision->getDisplayImage());
+    applyLeftCol("filter");
+    if (pixmapImage.isNull() != true) {
+        this->canvas->setPixmap(pixmapImage);
         saveAct->setEnabled(true);
         printAct->setEnabled(true);
-    } else {
-        canvas->setText("<i>Choose an image by clicking: File > Open </i><br><i>Image of width or height greater than 800px will be rescaled</i>");
+        leftCol->enableButtons(true);
     }
 }
 
 void MainWindow::feature() {
-    this->canvas->setText("Feature section selected, TBA");
-    leftCol->hide();
-    openAct->setEnabled(false);
-    saveAct->setEnabled(false);
-    printAct->setEnabled(false);
+    pixmapImage = QPixmap::fromImage(this->computerVision->getDisplayImage());
+    applyLeftCol("feature");
+    if (pixmapImage.isNull() != true) {
+        this->canvas->setPixmap(pixmapImage);
+        saveAct->setEnabled(true);
+        printAct->setEnabled(true);
+        leftCol->enableButtons(true);
+    }
+    openAct->setEnabled(true);
 }
 
 void MainWindow::applyMenuBarActions() {
@@ -140,19 +148,26 @@ void MainWindow::applyMenuBar() {
     fileMenu->addAction(featureAct);
 }
 
-void MainWindow::applyFilterWidget() {
-    QWidget *widget = new QWidget;
-    setCentralWidget(widget);
-
+void MainWindow::applyLeftCol(std::string mode) {
+    qDeleteAll(widget->children());
     QVBoxLayout* outer = new QVBoxLayout;
-    QLabel* statusBar = new QLabel();
+    statusBar = new QLabel();
 
     QWidget* filterAndDisp = new QWidget;
-    canvas = new QLabel(tr("<i>Choose an image by clicking: File > Open </i><br><i>Image of width or height greater than 800px will be rescaled</i>"));
+    if (mode == "filter") {
+        canvas = new QLabel(tr("<i>Choose an image by clicking: File > Open </i><br><i>Image of width or height greater than 800px will be rescaled</i>"));
+    } else if (mode == "feature") {
+        canvas = new QLabel(tr("Feature section selected, TBA"));
+    }
     canvas->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     canvas->setAlignment(Qt::AlignCenter);
     canvas->setStyleSheet("border: 0px;");
-    leftCol = new FilterWidget(this, canvas, this->computerVision, statusBar);
+
+    if (mode == "filter") {
+        leftCol = new LeftColWidget(this, canvas, this->computerVision, statusBar, "filter");
+    } else if (mode == "feature") {
+        leftCol = new LeftColWidget(this, canvas, this->computerVision, statusBar, "feature");
+    }
     leftCol->setMinimumWidth(200);
     leftCol->setMaximumWidth(200);
     QGroupBox* canvasGroup = new QGroupBox();
@@ -172,7 +187,6 @@ void MainWindow::applyFilterWidget() {
     outer->addWidget(filterAndDisp);
     outer->addWidget(statusBar);
     widget->setLayout(outer);
-
 }
 
 void MainWindow::centerWindow(QWidget* window) {

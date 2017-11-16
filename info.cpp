@@ -1,35 +1,35 @@
-#include "filterinfo.h"
+#include "info.h"
 #include <fstream>
 #include <QDebug>
 #include <QFile>
 #include <QTextBrowser>
 #include <QDesktopWidget>
 
-FilterInfo::FilterInfo()
+Info::Info()
 {
     this->setMaximumSize(QSize(1000, 1000));
     this->setMinimumSize(QSize(400, 500));
     this->setWindowFlags(Qt::FramelessWindowHint | Qt::Popup);
 }
 
-void FilterInfo::setContent(std::string filter) {
-    QString filterType;
-    if (filter == "Box filter") {
-        filterType = "boxFilter.html";
-    } else if (filter == "Median filter") {
-        filterType = "medianFilter.html";
-    } else if (filter == "Gaussian filter") {
-        filterType = "gaussianFilter.html";
-    } else if (filter == "Sobel filter") {
-        filterType = "sobelFilter.html";
-    } else if (filter == "Laplacian filter") {
-        filterType = "laplacianFilter.html";
+void Info::setContent(std::string content) {
+    QString contentType;
+    if (content == "Box filter") {
+        contentType = "boxFilter.html";
+    } else if (content == "Median filter") {
+        contentType = "medianFilter.html";
+    } else if (content == "Gaussian filter") {
+        contentType = "gaussianFilter.html";
+    } else if (content == "Sobel filter") {
+        contentType = "sobelFilter.html";
+    } else if (content == "Laplacian filter") {
+        contentType = "laplacianFilter.html";
     }
-    readHtml(filterType);
+    readHtml(contentType);
 }
 
-void FilterInfo::readHtml(QString filter) {
-    QString url = ":/filter/info/resources/" + filter;
+void Info::readHtml(QString content) {
+    QString url = ":/filter/info/resources/" + content;
     QFile file(url);
     QString html;
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))

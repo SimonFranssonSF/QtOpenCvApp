@@ -5,8 +5,9 @@
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QGroupBox>
-#include "filterwidget.h"
+#include "leftcolwidget.h"
 #include <computervision.h>
+#include <QWidget>
 
 
 namespace Ui {
@@ -19,8 +20,12 @@ public:
     explicit MainWindow(QWidget* parent = 0);
 private:
     Ui::MainWindow* ui;
-    FilterWidget* leftCol;
+    LeftColWidget* leftCol;
     QLabel* canvas;
+
+    QLabel* statusBar;
+
+    QWidget* widget;
 
     void applyLayout();
     void applyMenuBarActions();
@@ -38,9 +43,9 @@ private:
     QAction* filterAct;
     QAction* featureAct;
 
-    QPixmap pixmapImage;
+    QPixmap pixmapImage = QPixmap();
 
-    void applyFilterWidget();
+    void applyLeftCol(std::string mode);
 
     void centerWindow(QWidget* window);
 

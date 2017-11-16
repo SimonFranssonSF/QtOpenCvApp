@@ -1,4 +1,4 @@
-#include "filterwidget.h"
+#include "leftcolwidget.h"
 #include <QtWidgets>
 #include <QLabel>
 #include <QPushButton>
@@ -7,19 +7,20 @@
 #include <QSlider>
 #include <QWidget>
 #include <filterbuttons.h>
-#include <filterinfo.h>
+#include <info.h>
+#include <featurebuttons.h>
 
-FilterWidget::FilterWidget(QWidget *parent, QLabel* canvas, ComputerVision* computerVision, QLabel* statusBar):QWidget(parent) {
+LeftColWidget::LeftColWidget(QWidget *parent, QLabel* canvas, ComputerVision* computerVision, QLabel* statusBar, std::string mode):QWidget(parent) {
     this->computerVision = computerVision;
     this->canvas = canvas;
     this->statusBar = statusBar;
-
-    groupBoxFilters = new FilterButtons(0, canvas, computerVision, this, statusBar);
-    groupBoxFilters->enableButtons(false);
+    this->mode = mode;
 
     outerBox = new QVBoxLayout;
 
-    infoButtonBox = new QGroupBox("Filter info");
+    QString title = QString::fromStdString(mode);
+    title.append(" info");
+    infoButtonBox = new QGroupBox(title);
     QHBoxLayout* infoBoxLayout = new QHBoxLayout;
     QPushButton* info = new QPushButton("Info");
     connect(info, SIGNAL(clicked()), this, SLOT(infoButtonClicked()));
@@ -32,7 +33,13 @@ FilterWidget::FilterWidget(QWidget *parent, QLabel* canvas, ComputerVision* comp
     infoBoxLayout->addWidget(info);
     infoButtonBox->setLayout(infoBoxLayout);
 
-    outerBox->addWidget(groupBoxFilters);
+    if (mode == "filter") {
+        groupBoxButtons = FactoryGroupBox::create("filter" ,0, canvas, computerVision, this, statusBar);
+    } else if (mode == "feature") {
+        groupBoxButtons = FactoryGroupBox::create("feature", 0, canvas, computerVision, this, statusBar);
+    }
+    groupBoxButtons->enableButtons(false);
+    outerBox->addWidget(groupBoxButtons);
 
     boxFilterParams();
     medianFilterParams();
@@ -50,14 +57,14 @@ FilterWidget::FilterWidget(QWidget *parent, QLabel* canvas, ComputerVision* comp
     setLayout(outerBox);
 }
 
-void FilterWidget::sliderKernelBox(int value) {
+void LeftColWidget::sliderKernelBox(int value) {
     labelBKernel->setText("Kernel size: "+ QString::number(value));
     this->computerVision->applyBoxFilter(value);
     QImage qImage = this->computerVision->getDisplayImage();
     this->canvas->setPixmap(QPixmap::fromImage(qImage));
 }
 
-void FilterWidget::sliderKernelMedian(int value) {
+void LeftColWidget::sliderKernelMedian(int value) {
     // input to medianfilter function needs to be odd
     int val = value;
     if (value % 2 == 0) {
@@ -69,7 +76,7 @@ void FilterWidget::sliderKernelMedian(int value) {
     this->canvas->setPixmap(QPixmap::fromImage(qImage));
 }
 
-void FilterWidget::sliderKernelGaussian (int value) {
+void LeftColWidget::sliderKernelGaussian (int value) {
     // input to medianfilter function needs to be odd
     int val = value;
     if (value % 2 == 0){
@@ -81,7 +88,7 @@ void FilterWidget::sliderKernelGaussian (int value) {
     this->canvas->setPixmap(QPixmap::fromImage(qImage));
 }
 
-void FilterWidget::sliderSigmaGaussian(int value) {
+void LeftColWidget::sliderSigmaGaussian(int value) {
     // input to medianfilter function needs to be odd
     double val = value;
     if (val > 0){
@@ -94,7 +101,7 @@ void FilterWidget::sliderSigmaGaussian(int value) {
 }
 
 
-void FilterWidget::sliderKernelSobel(int value) {
+void LeftColWidget::sliderKernelSobel(int value) {
     int val = (value * 2) + 1;
 
     labelSKernel->setText("Kernel size: "+ QString::number(val));
@@ -108,7 +115,7 @@ void FilterWidget::sliderKernelSobel(int value) {
     this->canvas->setPixmap(QPixmap::fromImage(qImage));
 }
 
-void FilterWidget::sliderDxSobel(int value) {
+void LeftColWidget::sliderDxSobel(int value) {
     labelSDx->setText("Dx value: "+ QString::number(value));
     try {
         this->computerVision->applySobelFilter(-1, value, -1);
@@ -120,7 +127,7 @@ void FilterWidget::sliderDxSobel(int value) {
     this->canvas->setPixmap(QPixmap::fromImage(qImage));
 }
 
-void FilterWidget::sliderDySobel(int value) {
+void LeftColWidget::sliderDySobel(int value) {
     labelSDy->setText("Dy value: "+ QString::number(value));
     try {
         this->computerVision->applySobelFilter(-1, -1, value);
@@ -132,7 +139,7 @@ void FilterWidget::sliderDySobel(int value) {
     this->canvas->setPixmap(QPixmap::fromImage(qImage));
 }
 
-void FilterWidget::sliderKernelLaplacian(int value) {
+void LeftColWidget::sliderKernelLaplacian(int value) {
     // input to medianfilter function needs to be odd
     int val = value;
     if (value % 2 == 0){
@@ -144,15 +151,15 @@ void FilterWidget::sliderKernelLaplacian(int value) {
     this->canvas->setPixmap(QPixmap::fromImage(qImage));
 }
 
-void FilterWidget::infoButtonClicked() {
-    FilterInfo* infoWindow = new FilterInfo();
-    infoWindow->setContent(currentFilter);
+void LeftColWidget::infoButtonClicked() {
+    Info* infoWindow = new Info();
+    infoWindow->setContent(currentContent);
     infoWindow->show();
     centerWindow(infoWindow);
 }
 
 // Not used anymore as I decided to hide/show QgroupBoxes instead of removing replacing widgets over and over in one QGroupBox, but could be necessary for future stuff.
-void FilterWidget::clearWidgets(QLayout * layout) {
+void LeftColWidget::clearWidgets(QLayout * layout) {
    if (layout) {
        while (auto qItem = layout->takeAt(0)) {
           delete qItem->widget();
@@ -162,9 +169,9 @@ void FilterWidget::clearWidgets(QLayout * layout) {
 }
 
 
-void FilterWidget::showCorrectParam(QObject* button) {
+void LeftColWidget::showCorrectParam(QObject* button) {
     QString buttonName = button->objectName();
-    currentFilter = buttonName.toStdString();
+    currentContent = buttonName.toStdString();
     hideAllGroupParam();
 
     if (buttonName == "Box filter" && this->groupBoxBoxParam->isHidden() == true) {
@@ -186,7 +193,7 @@ void FilterWidget::showCorrectParam(QObject* button) {
     }
 }
 
-void FilterWidget::boxFilterParams() {
+void LeftColWidget::boxFilterParams() {
 
     groupBoxBoxParam = new QGroupBox("Box filter parameters");
 
@@ -212,7 +219,7 @@ void FilterWidget::boxFilterParams() {
     this->outerBox->addWidget(groupBoxBoxParam);
 }
 
-void FilterWidget::medianFilterParams() {
+void LeftColWidget::medianFilterParams() {
     groupBoxMedianParam = new QGroupBox("Median filter parameters");
 
     QGroupBox* medianKernel = new QGroupBox();
@@ -236,7 +243,7 @@ void FilterWidget::medianFilterParams() {
     this->outerBox->addWidget(groupBoxMedianParam);
 }
 
-void FilterWidget::gaussianFilterParams() {
+void LeftColWidget::gaussianFilterParams() {
     groupBoxGaussianParam = new QGroupBox("Gaussian filter parameters");
     QVBoxLayout* baseLayout = new QVBoxLayout;
 
@@ -274,7 +281,7 @@ void FilterWidget::gaussianFilterParams() {
     this->outerBox->addWidget(groupBoxGaussianParam);
 }
 
-void FilterWidget::sobelFilterParams() {
+void LeftColWidget::sobelFilterParams() {
     groupBoxSobelParam = new QGroupBox("Sobel filter parameters");
     QVBoxLayout* baseLayout = new QVBoxLayout;
 
@@ -325,7 +332,7 @@ void FilterWidget::sobelFilterParams() {
     this->outerBox->addWidget(groupBoxSobelParam);
 }
 
-void FilterWidget::laplacianFilterParams() {
+void LeftColWidget::laplacianFilterParams() {
     groupBoxLaplacianParam = new QGroupBox("Laplacian filter parameters");
     QVBoxLayout* baseLayout = new QVBoxLayout;
 
@@ -349,7 +356,7 @@ void FilterWidget::laplacianFilterParams() {
     this->outerBox->addWidget(groupBoxLaplacianParam);
 }
 
-void FilterWidget::hideAllGroupParam() {
+void LeftColWidget::hideAllGroupParam() {
     groupBoxBoxParam->hide();
     groupBoxMedianParam->hide();
     groupBoxGaussianParam->hide();
@@ -358,11 +365,11 @@ void FilterWidget::hideAllGroupParam() {
     //groupBoxNoParam->hide();
 }
 
-void FilterWidget::enableButtons(bool enable) {
-    groupBoxFilters->enableButtons(enable);
+void LeftColWidget::enableButtons(bool enable) {
+    groupBoxButtons->enableButtons(enable);
 }
 
-void FilterWidget::centerWindow(QWidget* window) {
+void LeftColWidget::centerWindow(QWidget* window) {
     QSize size = window->size();
 
     QDesktopWidget *desktop = QApplication::desktop();

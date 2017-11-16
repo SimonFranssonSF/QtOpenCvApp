@@ -1,11 +1,41 @@
 #ifndef FEATUREBUTTONS_H
 #define FEATUREBUTTONS_H
 
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QSlider>
+#include <QList>
+#include <factorygroupbox.h>
 
-class FeatureButtons
-{
-public:
-    FeatureButtons();
+class FactoryGroupBox;
+
+class FeatureButtons : public FactoryGroupBox {
+    Q_OBJECT
+    public:
+        FeatureButtons(QWidget *parent = 0, QLabel* qLabel = 0, ComputerVision* computerVision = 0, LeftColWidget* leftColWidget = 0, QLabel* statusBar = 0);
+        friend class FactoryGroupBox;
+        ComputerVision* computerVision;
+        LeftColWidget* leftColWidget;
+        void enableButtons(bool enable);
+    private:
+        QLabel* qLabel;
+        QLabel* statusBar;
+
+        QList<QPushButton*> buttons;
+
+        QGroupBox *groupBoxFeatureButton;
+
+        QVBoxLayout *boxButtons;
+
+        QPushButton *siftButton;
+        QPushButton *surfButton;
+        QPushButton *fastButton;
+
+        void applyButtonCharacteristics();
+        void resetButtons();
+
+    public slots:
+        void buttonClicked();
 };
 
 #endif // FEATUREBUTTONS_H
