@@ -24,7 +24,7 @@ FeatureButtons::FeatureButtons(QWidget *parent, QLabel* qLabel, ComputerVision* 
 
     applyButtonCharacteristics();
 
-    siftButton->setChecked(true);
+    //siftButton->setChecked(true);
 
     setLayout(boxButtons);
 }
@@ -44,7 +44,7 @@ void FeatureButtons::applyButtonCharacteristics() {
 
 void FeatureButtons::buttonClicked() {
     resetButtons();
-    QObject* button = QObject::sender();
+    //QObject* button = QObject::sender();
     statusBar->setText("");
 
 }
@@ -58,5 +58,15 @@ void FeatureButtons::resetButtons() {
 void FeatureButtons::enableButtons(bool enable) {
     for (int i = 0; i < this->buttons.length(); ++i) {
         this->buttons[i]->setEnabled(enable);
+    }
+}
+
+void FeatureButtons::setActiveButton(QString buttonName) {
+    qDebug() << "jafaafaaaja";
+    for (int i = 0; i < buttons.length(); i++) {
+        qDebug() << buttons[i]->text() << " " << buttonName;
+        if(buttons[i]->text() == buttonName) {
+            buttons[i]->setChecked(true);
+        }
     }
 }

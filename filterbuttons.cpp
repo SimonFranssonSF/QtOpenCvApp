@@ -30,7 +30,7 @@ FilterButtons::FilterButtons(QWidget *parent, QLabel* qLabel, ComputerVision* co
 
     applyButtonCharacteristics();
 
-    noFilterButton->setChecked(true);
+    //noFilterButton->setChecked(true);
 
     setLayout(boxButtons);
 }
@@ -52,6 +52,7 @@ void FilterButtons::buttonClicked() {
     resetButtons();
     QObject* button = QObject::sender();
     statusBar->setText("");
+    this->leftColWidget->currentContent = button->objectName().toStdString();
 
     if (button == noFilterButton && noFilterButton->isChecked() == false) {
         noFilterButton->setChecked(true);
@@ -87,7 +88,7 @@ void FilterButtons::buttonClicked() {
 
     QImage qImage = this->computerVision->getDisplayImage();
     this->qLabel->setPixmap(QPixmap::fromImage(qImage));
-    this->leftColWidget->showCorrectParam(button);
+    this->leftColWidget->showCorrectParam(button->objectName());
     if (button != sobelFilterButton) {
         this->statusBar->setText("");
     }
@@ -102,5 +103,13 @@ void FilterButtons::resetButtons() {
 void FilterButtons::enableButtons(bool enable) {
     for (int i = 0; i < this->buttons.length(); ++i) {
         this->buttons[i]->setEnabled(enable);
+    }
+}
+
+void FilterButtons::setActiveButton(QString buttonName) {
+    for (int i = 0; i < buttons.length(); i++) {
+        if(buttons[i]->text() == buttonName) {
+            buttons[i]->setChecked(true);
+        }
     }
 }

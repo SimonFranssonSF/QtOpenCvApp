@@ -13,7 +13,8 @@ class FactoryGroupBox : public QGroupBox
 
 public:
     static FactoryGroupBox* create(std::string mode, QWidget *parent = 0, QLabel* qLabel = 0, ComputerVision* computerVision = 0, LeftColWidget* leftColWidget = 0, QLabel* statusBar = 0);
-    virtual void enableButtons(bool enable){};
+    virtual void enableButtons(bool enable) {};
+    virtual void setActiveButton(QString buttonName) {};
 public slots:
     virtual void buttonClicked(){};
 };

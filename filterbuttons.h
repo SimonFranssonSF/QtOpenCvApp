@@ -17,6 +17,7 @@ class FilterButtons : public FactoryGroupBox {
         ComputerVision* computerVision;
         LeftColWidget* leftColWidget;
         void enableButtons(bool enable);
+        void setActiveButton(QString buttonName);
     private:
         QLabel* qLabel;
         QLabel* statusBar;

@@ -22,8 +22,11 @@ class LeftColWidget : public QWidget {
         ComputerVision* computerVision;
         QLabel* canvas;
         QLabel* statusBar;
-        void showCorrectParam(QObject* button);
+        void showCorrectParam(QString activeFilter);
         void enableButtons(bool enable);
+        QString getActiveButton();
+        void setActiveButton(QString buttonName);
+        std::string currentContent;
     private:
         std::string mode;
 
@@ -55,8 +58,6 @@ class LeftColWidget : public QWidget {
         QLabel* labelSDy;
 
         QLabel* labelLKernel;
-
-        std::string currentContent;
 
         void clearWidgets(QLayout * layout);
         void boxFilterParams();

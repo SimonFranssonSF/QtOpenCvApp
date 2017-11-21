@@ -30,6 +30,16 @@ public:
 
     cv::Mat workingImage;
     cv::Mat displayImage;
+
+    int sliderBoxVal = 3;
+    int sliderMedianVal = 3;
+    int sliderGaussianVal = 3;
+    double sliderSigmaVal = 0;
+    int sliderSobelVal = 1;
+    int sliderDxVal = 1;
+    int sliderDyVal = 1;
+    int sliderLaplacianVal = 3;
+
 private:
     cv::Mat qImageToMat(QImage &img);
     QImage matToQImage(cv::Mat &mat);

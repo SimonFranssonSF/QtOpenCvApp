@@ -9,6 +9,7 @@
 #include <filterbuttons.h>
 #include <info.h>
 #include <featurebuttons.h>
+#include <QDebug>
 
 LeftColWidget::LeftColWidget(QWidget *parent, QLabel* canvas, ComputerVision* computerVision, QLabel* statusBar, std::string mode):QWidget(parent) {
     this->computerVision = computerVision;
@@ -58,6 +59,7 @@ LeftColWidget::LeftColWidget(QWidget *parent, QLabel* canvas, ComputerVision* co
 }
 
 void LeftColWidget::sliderKernelBox(int value) {
+    computerVision->sliderBoxVal = value;
     labelBKernel->setText("Kernel size: "+ QString::number(value));
     this->computerVision->applyBoxFilter(value);
     QImage qImage = this->computerVision->getDisplayImage();
@@ -65,6 +67,7 @@ void LeftColWidget::sliderKernelBox(int value) {
 }
 
 void LeftColWidget::sliderKernelMedian(int value) {
+    computerVision->sliderMedianVal = value;
     // input to medianfilter function needs to be odd
     int val = value;
     if (value % 2 == 0) {
@@ -77,6 +80,7 @@ void LeftColWidget::sliderKernelMedian(int value) {
 }
 
 void LeftColWidget::sliderKernelGaussian (int value) {
+    computerVision->sliderGaussianVal = value;
     // input to medianfilter function needs to be odd
     int val = value;
     if (value % 2 == 0){
@@ -89,6 +93,7 @@ void LeftColWidget::sliderKernelGaussian (int value) {
 }
 
 void LeftColWidget::sliderSigmaGaussian(int value) {
+    computerVision->sliderSigmaVal = value;
     // input to medianfilter function needs to be odd
     double val = value;
     if (val > 0){
@@ -102,6 +107,7 @@ void LeftColWidget::sliderSigmaGaussian(int value) {
 
 
 void LeftColWidget::sliderKernelSobel(int value) {
+    computerVision->sliderSobelVal = value;
     int val = (value * 2) + 1;
 
     labelSKernel->setText("Kernel size: "+ QString::number(val));
@@ -116,6 +122,7 @@ void LeftColWidget::sliderKernelSobel(int value) {
 }
 
 void LeftColWidget::sliderDxSobel(int value) {
+    computerVision->sliderDxVal = value;
     labelSDx->setText("Dx value: "+ QString::number(value));
     try {
         this->computerVision->applySobelFilter(-1, value, -1);
@@ -128,6 +135,7 @@ void LeftColWidget::sliderDxSobel(int value) {
 }
 
 void LeftColWidget::sliderDySobel(int value) {
+    computerVision->sliderDyVal = value;
     labelSDy->setText("Dy value: "+ QString::number(value));
     try {
         this->computerVision->applySobelFilter(-1, -1, value);
@@ -140,6 +148,7 @@ void LeftColWidget::sliderDySobel(int value) {
 }
 
 void LeftColWidget::sliderKernelLaplacian(int value) {
+    computerVision->sliderLaplacianVal = value;
     // input to medianfilter function needs to be odd
     int val = value;
     if (value % 2 == 0){
@@ -169,9 +178,8 @@ void LeftColWidget::clearWidgets(QLayout * layout) {
 }
 
 
-void LeftColWidget::showCorrectParam(QObject* button) {
-    QString buttonName = button->objectName();
-    currentContent = buttonName.toStdString();
+void LeftColWidget::showCorrectParam(QString buttonName) {
+    this->currentContent = buttonName.toStdString();
     hideAllGroupParam();
 
     if (buttonName == "Box filter" && this->groupBoxBoxParam->isHidden() == true) {
@@ -186,7 +194,7 @@ void LeftColWidget::showCorrectParam(QObject* button) {
         this->groupBoxLaplacianParam->show();
     }
 
-    if (buttonName != "No filter") {
+    if (buttonName != "No filter" && !buttonName.isNull() && buttonName != "") {
         infoButtonBox->show();
     } else {
         infoButtonBox->hide();
@@ -201,9 +209,9 @@ void LeftColWidget::boxFilterParams() {
     QVBoxLayout* boxLayout = new QVBoxLayout;
 
     QVBoxLayout* boxKernelLayout = new QVBoxLayout;
-    labelBKernel = new QLabel("Kernel size: 3");
+    labelBKernel = new QLabel("Kernel size: " + QString::number(computerVision->sliderBoxVal));
     QSlider* slider = new QSlider(Qt::Horizontal);
-    slider->setValue(3);
+    slider->setValue(computerVision->sliderBoxVal);
     slider->setSingleStep(1);
     slider->setMinimum(1);
     slider->setMaximum(30);
@@ -225,9 +233,13 @@ void LeftColWidget::medianFilterParams() {
     QGroupBox* medianKernel = new QGroupBox();
 
     QVBoxLayout* medianKernelLayout = new QVBoxLayout;
-    labelMKernel = new QLabel("Kernel size: 3");
+    int valKern = computerVision->sliderMedianVal;
+    if (computerVision->sliderMedianVal % 2 == 0){
+        valKern += 1;
+    }
+    labelMKernel = new QLabel("Kernel size: " + QString::number(valKern));
     QSlider* slider = new QSlider(Qt::Horizontal);
-    slider->setValue(3);
+    slider->setValue(computerVision->sliderMedianVal);
     slider->setSingleStep(2);
     slider->setMinimum(1);
     slider->setMaximum(51);
@@ -249,9 +261,13 @@ void LeftColWidget::gaussianFilterParams() {
 
     QGroupBox* groupBoxGaussianKernel = new QGroupBox();
     QVBoxLayout* boxKernel = new QVBoxLayout;
-    labelGKernel = new QLabel("Kernel size: 3");
+    int valKern = computerVision->sliderGaussianVal;
+    if (computerVision->sliderGaussianVal % 2 == 0){
+        valKern += 1;
+    }
+    labelGKernel = new QLabel("Kernel size: " + QString::number(valKern));
     QSlider* sliderKernel = new QSlider(Qt::Horizontal);
-    sliderKernel->setValue(3);
+    sliderKernel->setValue(computerVision->sliderGaussianVal);
     sliderKernel->setSingleStep(2);
     sliderKernel->setMinimum(1);
     sliderKernel->setMaximum(51);
@@ -262,9 +278,13 @@ void LeftColWidget::gaussianFilterParams() {
 
     QGroupBox* groupBoxGaussianSigma = new QGroupBox();
     QVBoxLayout* boxSigma = new QVBoxLayout;
-    labelGSigma = new QLabel("Sigma size: 0.00");
+    double val = 0;
+    if (computerVision->sliderSigmaVal > 0) {
+        val = computerVision->sliderSigmaVal / 50;
+    }
+    labelGSigma = new QLabel("Sigma size: " + QString::number(val));
     QSlider* sliderSigma = new QSlider(Qt::Horizontal);
-    sliderSigma->setValue(0.0);
+    sliderSigma->setValue(computerVision->sliderSigmaVal);
     sliderSigma->setSingleStep(1);
     sliderSigma->setMinimum(0);
     sliderSigma->setMaximum(1400);
@@ -287,9 +307,10 @@ void LeftColWidget::sobelFilterParams() {
 
     QGroupBox* groupBoxSobelKernel = new QGroupBox();
     QVBoxLayout* boxKernel = new QVBoxLayout;
-    labelSKernel = new QLabel("Kernel size: 3");
     QSlider* sliderKernel = new QSlider(Qt::Horizontal);
-    sliderKernel->setValue(1);
+    sliderKernel->setValue(computerVision->sliderSobelVal);
+    int val = computerVision->sliderSobelVal * 2 +1;
+    labelSKernel = new QLabel("Kernel size: " + QString::number(val));
     sliderKernel->setSingleStep(1);
     sliderKernel->setMinimum(1);
     sliderKernel->setMaximum(3);
@@ -300,9 +321,9 @@ void LeftColWidget::sobelFilterParams() {
 
     QGroupBox* groupBoxSobelDx = new QGroupBox();
     QVBoxLayout* boxDx = new QVBoxLayout;
-    labelSDx = new QLabel("Dx value: 1");
+    labelSDx = new QLabel("Dx value: " + QString::number(computerVision->sliderDxVal));
     QSlider* sliderDx = new QSlider(Qt::Horizontal);
-    sliderDx->setValue(1);
+    sliderDx->setValue(computerVision->sliderDxVal);
     sliderDx->setSingleStep(1);
     sliderDx->setMinimum(1);
     sliderDx->setMaximum(6);
@@ -313,9 +334,9 @@ void LeftColWidget::sobelFilterParams() {
 
     QGroupBox* groupBoxSobelDy = new QGroupBox();
     QVBoxLayout* boxDy = new QVBoxLayout;
-    labelSDy = new QLabel("Dy value: 1");
+    labelSDy = new QLabel("Dy value: " + QString::number(computerVision->sliderDyVal));
     QSlider* sliderDy = new QSlider(Qt::Horizontal);
-    sliderDy->setValue(1);
+    sliderDy->setValue(computerVision->sliderDyVal);
     sliderDy->setSingleStep(1);
     sliderDy->setMinimum(1);
     sliderDy->setMaximum(6);
@@ -338,9 +359,13 @@ void LeftColWidget::laplacianFilterParams() {
 
     QGroupBox* groupBoxLaplacianKernel = new QGroupBox();
     QVBoxLayout* boxKernel = new QVBoxLayout;
-    labelLKernel = new QLabel("Kernel size: 3");
+    int valKern = computerVision->sliderLaplacianVal;
+    if (computerVision->sliderLaplacianVal % 2 == 0){
+        valKern += 1;
+    }
+    labelLKernel = new QLabel("Kernel size: " + QString::number(valKern));
     QSlider* sliderKernel = new QSlider(Qt::Horizontal);
-    sliderKernel->setValue(3);
+    sliderKernel->setValue(computerVision->sliderLaplacianVal);
     sliderKernel->setSingleStep(2);
     sliderKernel->setMinimum(1);
     sliderKernel->setMaximum(15);
@@ -380,4 +405,12 @@ void LeftColWidget::centerWindow(QWidget* window) {
     int centerWidth = (dWidth/2) - (wWidth/2);
     int centerHeight = (dHeight/2) - (wHeight/2);
     window->move(centerWidth, centerHeight);
+}
+
+QString LeftColWidget::getActiveButton() {
+    return QString::fromStdString(currentContent);
+};
+
+void LeftColWidget::setActiveButton(QString buttonName) {
+    this->groupBoxButtons->setActiveButton(buttonName);
 }

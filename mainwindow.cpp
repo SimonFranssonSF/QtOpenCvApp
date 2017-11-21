@@ -41,6 +41,9 @@ void MainWindow::open() {
     if (!pixmapImage.isNull()) {
         computerVision->setWorkingImage(pixmapImage);
 
+        //sets working image as display image.
+        computerVision->applyNoFilter();
+
         // This was needed to center the mainWindow after using QFileDialog
         canvas->hide();
         canvas->setPixmap(pixmapImage);
@@ -86,9 +89,17 @@ void MainWindow::print() {
 }
 
 void MainWindow::filter() {
+    if(leftCol->getActiveButton() != "") {
+        activeFeatureButton = leftCol->getActiveButton();
+    }
+    if (activeFilterButton == "") {
+        activeFilterButton = leftCol->getActiveButton();
+    }
     openAct->setEnabled(true);
     pixmapImage = QPixmap::fromImage(this->computerVision->getDisplayImage());
     applyLeftCol("filter");
+    leftCol->showCorrectParam(activeFilterButton);
+    leftCol->setActiveButton(activeFilterButton);
     if (pixmapImage.isNull() != true) {
         this->canvas->setPixmap(pixmapImage);
         saveAct->setEnabled(true);
@@ -98,8 +109,15 @@ void MainWindow::filter() {
 }
 
 void MainWindow::feature() {
+    if(leftCol->getActiveButton() != "") {
+        activeFilterButton = leftCol->getActiveButton();
+    }
+    if (activeFeatureButton == "") {
+        activeFeatureButton = leftCol->getActiveButton();
+    }
     pixmapImage = QPixmap::fromImage(this->computerVision->getDisplayImage());
     applyLeftCol("feature");
+    leftCol->setActiveButton(activeFeatureButton);
     if (pixmapImage.isNull() != true) {
         this->canvas->setPixmap(pixmapImage);
         saveAct->setEnabled(true);

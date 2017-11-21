@@ -43,6 +43,9 @@ private:
     QAction* filterAct;
     QAction* featureAct;
 
+    QString activeFilterButton;
+    QString activeFeatureButton;
+
     QPixmap pixmapImage = QPixmap();
 
     void applyLeftCol(std::string mode);
