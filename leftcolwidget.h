@@ -23,10 +23,11 @@ class LeftColWidget : public QWidget {
         QLabel* canvas;
         QLabel* statusBar;
         void showCorrectParam(QString activeFilter);
-        void enableButtons(bool enable);
+        void enableButtons(bool enable, bool nofilter);
         QString getActiveButton();
         void setActiveButton(QString buttonName);
         std::string currentContent;
+        void passiveButtonClick(QString type);
     private:
         std::string mode;
 

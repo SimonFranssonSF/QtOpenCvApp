@@ -51,7 +51,7 @@ void MainWindow::open() {
         qApp->processEvents();
         centerWindow(this);
 
-        leftCol->enableButtons(true);
+        leftCol->enableButtons(true, true);
         saveAct->setEnabled(true);
         printAct->setEnabled(true);
     }
@@ -89,12 +89,14 @@ void MainWindow::print() {
 }
 
 void MainWindow::filter() {
+    setWindowTitle("Filters");
+
     if(leftCol->getActiveButton() != "") {
         activeFeatureButton = leftCol->getActiveButton();
     }
-    if (activeFilterButton == "") {
+    /*if (activeFilterButton == "") {
         activeFilterButton = leftCol->getActiveButton();
-    }
+    }*/
     openAct->setEnabled(true);
     pixmapImage = QPixmap::fromImage(this->computerVision->getDisplayImage());
     applyLeftCol("filter");
@@ -104,17 +106,24 @@ void MainWindow::filter() {
         this->canvas->setPixmap(pixmapImage);
         saveAct->setEnabled(true);
         printAct->setEnabled(true);
-        leftCol->enableButtons(true);
+        qDebug() << activeFilterButton;
+        if(activeFilterButton != "") {
+            leftCol->enableButtons(true, false);
+        } else {
+            leftCol->enableButtons(true, true);
+        }
     }
 }
 
 void MainWindow::feature() {
+    setWindowTitle("Features");
+
     if(leftCol->getActiveButton() != "") {
         activeFilterButton = leftCol->getActiveButton();
     }
-    if (activeFeatureButton == "") {
+    /*if (activeFeatureButton == "") {
         activeFeatureButton = leftCol->getActiveButton();
-    }
+    }*/
     pixmapImage = QPixmap::fromImage(this->computerVision->getDisplayImage());
     applyLeftCol("feature");
     leftCol->setActiveButton(activeFeatureButton);
@@ -122,7 +131,13 @@ void MainWindow::feature() {
         this->canvas->setPixmap(pixmapImage);
         saveAct->setEnabled(true);
         printAct->setEnabled(true);
-        leftCol->enableButtons(true);
+        qDebug() << activeFeatureButton;
+        if(activeFeatureButton != "") {
+            leftCol->enableButtons(true, false);
+            leftCol->passiveButtonClick(activeFeatureButton);
+        } else {
+            leftCol->enableButtons(true, true);
+        }
     }
     openAct->setEnabled(true);
 }

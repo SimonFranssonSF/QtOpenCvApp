@@ -9,6 +9,7 @@ class ComputerVision {
 public:
     ComputerVision();
     QImage getDisplayImage();
+    QImage getDisplayImageFeatures();
 
     int getBoxKernel();
     int getMedianKernel();
@@ -28,8 +29,14 @@ public:
     void applySobelFilter(int kernelSize = 3, int dx = 1, int dy = 1);
     void applyLaplacianFilter(int kernelSize = 3);
 
+    void applyNoDetector();
+    void applySIFT();
+    void applySURF();
+    void applyFAST();
+
     cv::Mat workingImage;
     cv::Mat displayImage;
+    cv::Mat displayImageFeature;
 
     int sliderBoxVal = 3;
     int sliderMedianVal = 3;

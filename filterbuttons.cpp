@@ -100,9 +100,13 @@ void FilterButtons::resetButtons() {
     }
 }
 
-void FilterButtons::enableButtons(bool enable) {
+void FilterButtons::enableButtons(bool enable, bool nofilter) {
     for (int i = 0; i < this->buttons.length(); ++i) {
         this->buttons[i]->setEnabled(enable);
+    }
+
+    if (enable && nofilter) {
+        buttons[0]->setChecked(true);
     }
 }
 
@@ -113,3 +117,6 @@ void FilterButtons::setActiveButton(QString buttonName) {
         }
     }
 }
+
+void FilterButtons::passiveButtonClick(QString type) {}
+

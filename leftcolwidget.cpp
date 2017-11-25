@@ -39,7 +39,7 @@ LeftColWidget::LeftColWidget(QWidget *parent, QLabel* canvas, ComputerVision* co
     } else if (mode == "feature") {
         groupBoxButtons = FactoryGroupBox::create("feature", 0, canvas, computerVision, this, statusBar);
     }
-    groupBoxButtons->enableButtons(false);
+    groupBoxButtons->enableButtons(false, false);
     outerBox->addWidget(groupBoxButtons);
 
     boxFilterParams();
@@ -390,8 +390,8 @@ void LeftColWidget::hideAllGroupParam() {
     //groupBoxNoParam->hide();
 }
 
-void LeftColWidget::enableButtons(bool enable) {
-    groupBoxButtons->enableButtons(enable);
+void LeftColWidget::enableButtons(bool enable, bool nofilter) {
+    groupBoxButtons->enableButtons(enable, nofilter);
 }
 
 void LeftColWidget::centerWindow(QWidget* window) {
@@ -413,4 +413,8 @@ QString LeftColWidget::getActiveButton() {
 
 void LeftColWidget::setActiveButton(QString buttonName) {
     this->groupBoxButtons->setActiveButton(buttonName);
+}
+
+void LeftColWidget::passiveButtonClick(QString type) {
+   this->groupBoxButtons->passiveButtonClick(type);
 }

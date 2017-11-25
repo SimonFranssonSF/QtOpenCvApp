@@ -16,21 +16,23 @@ class FeatureButtons : public FactoryGroupBox {
         friend class FactoryGroupBox;
         ComputerVision* computerVision;
         LeftColWidget* leftColWidget;
-        void enableButtons(bool enable);
+        void enableButtons(bool enable, bool nofilter);
         void setActiveButton(QString buttonName);
+        void passiveButtonClick(QString type);
     private:
         QLabel* qLabel;
         QLabel* statusBar;
 
         QList<QPushButton*> buttons;
 
-        QGroupBox *groupBoxFeatureButton;
+        QGroupBox* groupBoxFeatureButton;
 
-        QVBoxLayout *boxButtons;
+        QVBoxLayout* boxButtons;
 
-        QPushButton *siftButton;
-        QPushButton *surfButton;
-        QPushButton *fastButton;
+        QPushButton* noDetector;
+        QPushButton* siftButton;
+        QPushButton* surfButton;
+        QPushButton* fastButton;
 
         void applyButtonCharacteristics();
         void resetButtons();

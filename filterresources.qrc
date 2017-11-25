@@ -5,5 +5,8 @@
         <file>resources/sobelFilter.html</file>
         <file>resources/gaussianFilter.html</file>
         <file>resources/medianFilter.html</file>
+        <file>resources/SURF.html</file>
+        <file>resources/FAST.html</file>
+        <file>resources/SIFT.html</file>
     </qresource>
 </RCC>

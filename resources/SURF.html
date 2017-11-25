@@ -1,0 +1,14 @@
+<h1>Speeded up robust features (SURF)</h1>
+<div id="bodyContent" class="mw-body-content">
+<div id="siteSub" class="noprint">From Wikipedia, the free encyclopedia</div>
+
+<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div class="mw-parser-output"><p>
+In computer vision, speeded up robust features (SURF) is a patented local feature detector and descriptor. It can be used for tasks such as object recognition, image registration, classification or 3D reconstruction. It is partly inspired by the scale-invariant feature transform (SIFT) descriptor. The standard version of SURF is several times faster than SIFT and claimed by its authors to be more robust against different image transformations than SIFT.
+
+To detect interest points, SURF uses an integer approximation of the determinant of Hessian blob detector, which can be computed with 3 integer operations using a precomputed integral image. Its feature descriptor is based on the sum of the Haar wavelet response around the point of interest. These can also be computed with the aid of the integral image.
+
+SURF descriptors have been used to locate and recognize objects, people or faces, to reconstruct 3D scenes, to track objects and to extract points of interest.
+
+SURF was first presented by Herbert Bay, et al., at the 2006 European Conference on Computer Vision. An application of the algorithm is patented in the United States.[1] An "upright" version of SURF (called U-SURF) is not invariant to image rotation and therefore faster to compute and better suited for application where the camera remains more or less horizontal.
+
+The image is transformed into coordinates, using the multi-resolution pyramid technique, to copy the original image with Pyramidal Gaussian or Laplacian Pyramid shape to obtain an image with the same size but with reduced bandwidth. This achieves a special blurring effect on the original image, called Scale-Space and ensures that the points of interest are scale invariant.</p></div>

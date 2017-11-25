@@ -1,5 +1,9 @@
 #include "computervision.h"
 #include </usr/local/Cellar/opencv3/3.2.0/include/opencv2/opencv.hpp>
+#include </usr/local/Cellar/opencv3/3.2.0/include/opencv2/core/core.hpp>
+#include </usr/local/Cellar/opencv3/3.2.0/include/opencv2/features2d.hpp>
+#include </usr/local/Cellar/opencv3/3.2.0/include/opencv2/features2d/features2d.hpp>
+#include </usr/local/Cellar/opencv3/3.2.0/include/opencv2/highgui/highgui.hpp>
 #include <math.h>
 #include <iostream>
 #include <QtDebug>
@@ -140,6 +144,31 @@ void ComputerVision::applyLaplacianFilter(int kernelSize) {
     convertScaleAbs(this->displayImage, this->displayImage);
 }
 
+void ComputerVision::applyNoDetector() {
+    this->displayImageFeature = this->displayImage.clone();
+}
+
+void ComputerVision::applySIFT() {
+    /*cv:: detector;
+    vector<cv::KeyPoint> keypoints;
+    detector.detect(displayImage, keypoints);
+
+    cv::drawKeypoints(displayImage, keypoints, displayImage);*/
+
+}
+
+void ComputerVision::applySURF() {
+
+}
+
+void ComputerVision::applyFAST() {
+    cv::Ptr<cv::FastFeatureDetector> detector = cv::FastFeatureDetector::create(40);
+    vector<cv::KeyPoint> keypoints;
+    detector->detect(displayImage, keypoints);
+
+    cv::drawKeypoints(displayImage, keypoints, displayImageFeature);
+}
+
 QImage ComputerVision::getDisplayImage() {
    QImage qImage;
    if (this->displayImage.type() == 16) {
@@ -180,4 +209,14 @@ int ComputerVision::getSobelDy() {
 
 int ComputerVision::getLaplacianKernel() {
     return laplacianKernelSize;
+}
+
+QImage ComputerVision::getDisplayImageFeatures() {
+    QImage qImage;
+    if (this->displayImageFeature.type() == 16) {
+        qImage = matToQImage(this->displayImageFeature);
+    } else if (this->displayImageFeature.type() == 0) {
+        qImage = matToQImageGrayScale(this->displayImageFeature);
+    }
+     return qImage;
 }
