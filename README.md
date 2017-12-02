@@ -5,11 +5,10 @@ Small app written in C++ using QT Creator and openCV3 library. Open an image and
 The next step is to implement and explore the feature detector/descriptor algorithms.
 
 ![Alt text](/screenshots/1.png?raw=true "Optional Title")
-![Alt text](/screenshots/2.png?raw=true "Optional Title")
 ![Alt text](/screenshots/3.png?raw=true "Optional Title")
+![Alt text](/screenshots/5.png?raw=true "Optional Title")
+![Alt text](/screenshots/6.png?raw=true "Optional Title")
 ![Alt text](/screenshots/4.png?raw=true "Optional Title")
-
-This app was written as a hobby/ out of curiosity.
 
 For interest in OpenCV visit - https://opencv.org/
 For interest in QT - https://www.qt.io/ 
