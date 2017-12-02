@@ -14,14 +14,14 @@ FeatureButtons::FeatureButtons(QWidget *parent, QLabel* qLabel, ComputerVision* 
 
     boxButtons = new QVBoxLayout;
     this->setTitle("Feature detectors");
-    noDetector = new QPushButton(tr("No Detector"));
-    siftButton = new QPushButton(tr("SIFT"));
-    surfButton = new QPushButton(tr("SURF"));
+    noDetector = new QPushButton(tr("No detector"));
+    orbButton = new QPushButton(tr("ORB"));
+    briskButton = new QPushButton(tr("BRISK"));
     fastButton = new QPushButton(tr("FAST"));
 
     buttons.append(noDetector);
-    buttons.append(siftButton);
-    buttons.append(surfButton);
+    buttons.append(orbButton);
+    buttons.append(briskButton);
     buttons.append(fastButton);
 
     applyButtonCharacteristics();
@@ -50,12 +50,12 @@ void FeatureButtons::buttonClicked() {
     statusBar->setText("");
     this->leftColWidget->currentContent = button->objectName().toStdString();
 
-    if (button == siftButton && siftButton->isChecked() == false) {
-        siftButton->setChecked(true);
-        computerVision->applySIFT();
-    } else if (button == surfButton && surfButton->isChecked() == false) {
-        surfButton->setChecked(true);
-        computerVision->applySURF();
+    if (button == orbButton && orbButton->isChecked() == false) {
+        orbButton->setChecked(true);
+        computerVision->applyORB();
+    } else if (button == briskButton && briskButton->isChecked() == false) {
+        briskButton->setChecked(true);
+        computerVision->applyBRISK();
     } else if (button == fastButton && fastButton->isChecked() == false) {
         fastButton->setChecked(true);
         computerVision->applyFAST();
@@ -69,10 +69,10 @@ void FeatureButtons::buttonClicked() {
 }
 
 void FeatureButtons::passiveButtonClick(QString type) {
-    if (type == "SIFT") {
-        computerVision->applySIFT();
-    } else if (type == "SURF") {
-        computerVision->applySURF();
+    if (type == "ORB") {
+        computerVision->applyORB();
+    } else if (type == "BRISK") {
+        computerVision->applyBRISK();
     } else if (type == "FAST") {
         computerVision->applyFAST();
     }

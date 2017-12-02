@@ -58,7 +58,6 @@ void MainWindow::open() {
 }
 
 void MainWindow::saveAs() {
-    // From www.qt.io docs
     const QString format = "png";
     QString initialPath = QStandardPaths::writableLocation(QStandardPaths::PicturesLocation);
     if (initialPath.isEmpty())
@@ -115,6 +114,7 @@ void MainWindow::filter() {
     }
 }
 
+
 void MainWindow::feature() {
     setWindowTitle("Features");
 
@@ -142,6 +142,58 @@ void MainWindow::feature() {
     openAct->setEnabled(true);
 }
 
+void MainWindow::stitching() {
+    qDeleteAll(widget->children());
+    //setWindowTitle("Stitching");
+
+    //canvas->hide();
+    //canvas->setText("");
+    QGroupBox* stitchingBox = new QGroupBox();
+    leftCol = new LeftColWidget(this, canvas, this->computerVision, statusBar, "feature");
+    leftCol->setMinimumWidth(200);
+    leftCol->setMaximumWidth(200);
+
+    QGridLayout* stitchVert = new QGridLayout;
+
+    QPixmap left = QPixmap(":/filter/info/resources/1.jpg");
+    left = left.scaled(500, 500, Qt::KeepAspectRatio);
+    QLabel* leftImg = new QLabel();
+    leftImg->setAlignment(Qt::AlignCenter);
+    leftImg->setPixmap(left);
+
+    QPixmap right = QPixmap(":/filter/info/resources/2.jpg");
+    right = right.scaled(500, 500, Qt::KeepAspectRatio);
+    QLabel* rightImg = new QLabel();
+
+
+    rightImg->setAlignment(Qt::AlignCenter);
+    rightImg->setPixmap(right);
+    leftImg->setStyleSheet("background-color: blue;");
+    rightImg->setStyleSheet("background-color: red;");
+    stitchVert->addWidget(leftImg, 0, 0);
+    stitchVert->addWidget(rightImg, 0, 1);
+    //innerStitchingBox->setLayout(stitchInnerHor);
+
+
+    QLabel* presentation = new QLabel(tr(""));
+    presentation->setAlignment(Qt::AlignCenter);
+    presentation->setStyleSheet("background-color: green;");
+
+    stitchVert->addWidget(presentation, 1, 0, 1, 2);
+    stitchingBox->setLayout(stitchVert);
+    QHBoxLayout* main = new QHBoxLayout;
+    main->addWidget(leftCol);
+    main->addWidget(stitchingBox);
+    widget->setLayout(main);
+
+    QPixmap res = ComputerVision::stitchTwoImg(left, right);
+    res = res.scaled(2000, 400, Qt::KeepAspectRatio);
+    presentation->setPixmap(res);
+    qApp->processEvents();
+    centerWindow(this);
+
+}
+
 void MainWindow::applyMenuBarActions() {
     openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
@@ -166,6 +218,10 @@ void MainWindow::applyMenuBarActions() {
     featureAct->setStatusTip(tr("View the feature detection tools"));
     connect(featureAct, &QAction::triggered, this, &MainWindow::feature);
 
+    stitchAct = new QAction(tr("&Image stitching"), this);
+    stitchAct->setStatusTip(tr("See the different detectors in action (with descriptors, matching, and transformation)"));
+    connect(stitchAct, &QAction::triggered, this, &MainWindow::stitching);
+
     saveAct->setEnabled(false);
     printAct->setEnabled(false);
 }
@@ -179,6 +235,8 @@ void MainWindow::applyMenuBar() {
     fileMenu = menuBar()->addMenu(tr("&Tools"));
     fileMenu->addAction(filterAct);
     fileMenu->addAction(featureAct);
+    fileMenu->addAction(stitchAct);
+
 }
 
 void MainWindow::applyLeftCol(std::string mode) {
@@ -190,7 +248,7 @@ void MainWindow::applyLeftCol(std::string mode) {
     if (mode == "filter") {
         canvas = new QLabel(tr("<i>Choose an image by clicking: File > Open </i><br><i>Image of width or height greater than 800px will be rescaled</i>"));
     } else if (mode == "feature") {
-        canvas = new QLabel(tr("Feature section selected, TBA"));
+        canvas = new QLabel(tr("Feature section selected, select an image to see them in action"));
     }
     canvas->setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     canvas->setAlignment(Qt::AlignCenter);

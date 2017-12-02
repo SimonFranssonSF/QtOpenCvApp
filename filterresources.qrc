@@ -5,8 +5,14 @@
         <file>resources/sobelFilter.html</file>
         <file>resources/gaussianFilter.html</file>
         <file>resources/medianFilter.html</file>
-        <file>resources/SURF.html</file>
         <file>resources/FAST.html</file>
-        <file>resources/SIFT.html</file>
+        <file>resources/BRISK.html</file>
+        <file>resources/ORB.html</file>
+        <file>resources/43b.jpg</file>
+        <file>resources/43a.jpg</file>
+        <file>resources/169b.jpg</file>
+        <file>resources/169a.jpg</file>
+        <file>resources/2.jpg</file>
+        <file>resources/1.jpg</file>
     </qresource>
 </RCC>

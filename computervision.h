@@ -30,9 +30,13 @@ public:
     void applyLaplacianFilter(int kernelSize = 3);
 
     void applyNoDetector();
-    void applySIFT();
-    void applySURF();
+    void applyORB();
+    void applyBRISK();
     void applyFAST();
+
+    static QPixmap stitchTwoImg(QPixmap a,QPixmap b);
+    static cv::Mat qImageToMatS(QImage &img);
+    static QImage matToQImageS(cv::Mat &imgMat);
 
     cv::Mat workingImage;
     cv::Mat displayImage;

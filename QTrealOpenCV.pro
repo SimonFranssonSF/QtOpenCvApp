@@ -47,7 +47,11 @@ LIBS += -L/usr/local/Cellar/opencv3/3.2.0/lib \
      -lopencv_core \
      -lopencv_imgproc \
      -lopencv_features2d\
-     -lopencv_highgui
+     -lopencv_highgui\
+     -lopencv_stitching.3.2.0\
+     -lopencv_imgcodecs\
+     -lopencv_imgproc.3.2.0\
+     -lopencv_calib3d.3.2.0
 
 LIBS += -L/usr/local/Cellar/boost/1.65.1/lib \
      -lboost_system \

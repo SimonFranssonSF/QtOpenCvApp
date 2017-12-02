@@ -30,8 +30,8 @@ class FeatureButtons : public FactoryGroupBox {
         QVBoxLayout* boxButtons;
 
         QPushButton* noDetector;
-        QPushButton* siftButton;
-        QPushButton* surfButton;
+        QPushButton* orbButton;
+        QPushButton* briskButton;
         QPushButton* fastButton;
 
         void applyButtonCharacteristics();

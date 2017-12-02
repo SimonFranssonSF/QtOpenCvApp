@@ -24,10 +24,10 @@ void Info::setContent(std::string content) {
         contentType = "sobelFilter.html";
     } else if (content == "Laplacian filter") {
         contentType = "laplacianFilter.html";
-    } else if (content == "SIFT") {
-        contentType = "SIFT.html";
-    } else if (content == "SURF") {
-        contentType = "SURF.html";
+    } else if (content == "ORB") {
+        contentType = "ORB.html";
+    } else if (content == "BRISK") {
+        contentType = "BRISK.html";
     } else if (content == "FAST") {
         contentType = "FAST.html";
     }

@@ -194,7 +194,7 @@ void LeftColWidget::showCorrectParam(QString buttonName) {
         this->groupBoxLaplacianParam->show();
     }
 
-    if (buttonName != "No filter" && !buttonName.isNull() && buttonName != "") {
+    if (buttonName != "No filter" && buttonName != "No detector" && !buttonName.isNull() && buttonName != "") {
         infoButtonBox->show();
     } else {
         infoButtonBox->hide();

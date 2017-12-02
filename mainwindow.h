@@ -37,11 +37,14 @@ private:
     void print();
     void filter();
     void feature();
+    void stitching();
+
     QAction* openAct;
     QAction* saveAct;
     QAction* printAct;
     QAction* filterAct;
     QAction* featureAct;
+    QAction* stitchAct;
 
     QString activeFilterButton;
     QString activeFeatureButton;
